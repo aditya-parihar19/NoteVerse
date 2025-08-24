@@ -7,7 +7,6 @@ const userSchema = new Schema({
     name: {
         type: String,
         required: true,
-        lowercase: true,
         trim: true,
         index: true
     },
@@ -28,7 +27,7 @@ const userSchema = new Schema({
         enum: ["student", "faculty", "admin"],
         default: "student"
     },
-    refresh_token: {
+    refreshToken: {
         type: String
     }
 
@@ -58,7 +57,7 @@ userSchema.methods.generateAccessToken = function () {
         }
     )
 }
-userSchema.methods.generateAccessToken = function () {
+userSchema.methods.generateRefreshToken = function () {
     return jwt.sign(
         {
             _id: this._id
