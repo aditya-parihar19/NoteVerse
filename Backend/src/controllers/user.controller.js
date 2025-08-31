@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from  "../utils/ApiResponse.js"
 import { User } from "../models/user.model.js"
 import jwt from "jsonwebtoken"
+import { sendWelcomeEmail } from "../utils/mailer.js"
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -49,8 +50,10 @@ const registerUser = asyncHandler( async (req, res) => {
     throw new ApiError(500, "something went wrong while registering user");
   }
 
+  sendWelcomeEmail(createdUser.email, createdUser.name)
+
   res.status(201).json(
-    new ApiResponse(200, createdUser, "User registered successfully")
+    new ApiResponse(201, createdUser, "User registered successfully")
   )
 
 })
