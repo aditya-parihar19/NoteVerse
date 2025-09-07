@@ -3,7 +3,8 @@ import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from  "../utils/ApiResponse.js"
 import { User } from "../models/user.model.js"
 import jwt from "jsonwebtoken"
-import { sendWelcomeEmail } from "../utils/mailer.js"
+import { sendWelcomeEmail,  SendResetPasswordInstruction } from "../utils/mailer.js"
+import crypto from "crypto"
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -145,6 +146,72 @@ const getCurrentUser = asyncHandler( async (req, res) => {
   )
 })
 
+const forgotPassword = asyncHandler( async  (req, res) => {
+  const { email } = req.body
+
+  if(!email){
+    throw new ApiError(400, "Email must be required")
+  }
+
+  const user = await User.findOne({email})
+
+  if(!user){
+    throw new ApiError(404, "User with this email not exist")
+  }
+
+  const resetPasswordToken = crypto.randomBytes(16).toString("hex")
+  const hashedToken  = crypto.createHash("sha256").update(resetPasswordToken).digest("hex")
+  if(!resetPasswordToken || !hashedToken){
+    throw new ApiError(500, "An error occured, Please try again later")
+  }
+
+  user.resetPasswordToken = hashedToken
+  user.resetPasswordExpires = Date.now() + 60*60*1000
+  await user.save();
+  
+  const resetPasswordUrl = `${process.env.FRONTEND_URL}/reset-password/${resetPasswordToken}`
+
+  console.log(resetPasswordUrl)
+  await SendResetPasswordInstruction(user.email, resetPasswordUrl)
+
+  res.status(200)
+  .json(
+    new ApiResponse(200, "Password Reset Instructions sent successfully")
+  )
+})
+
+const resetPassword = asyncHandler( async (req, res) => {
+  const { resetPasswordToken, password } = req.body
+
+  if(!resetPasswordToken || !password){
+    throw new ApiError(400, "Reset password token and password are required")
+  }
+
+  const hashedToken = crypto.createHash("sha256").update(resetPasswordToken).toString("hex")
+
+  if(!hashedToken) {
+    throw new ApiError(500, "Failed to generate Reset Password Token, please try again");
+  } 
+
+  const  user = await User.findOneAndUpdate({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpires: { $gt: Date.now() }
+  })
+
+  if(!user) {
+    throw new ApiError(400, "Invalid or Expired token")
+  }
+
+  user.password = password
+  user.resetPasswordToken = undefined
+  user.resetPasswordExpires = undefined
+  await user.save(); // To trigger pre hook and hash password
+
+  res.status(200)
+  .json(
+    new ApiResponse(200, "Password changed successfully")
+  )
+})
 
 export {
   registerUser,
@@ -152,4 +219,6 @@ export {
   logoutUser,
   refreshAccessToken,
   getCurrentUser,
+  forgotPassword,
+  resetPassword
 }

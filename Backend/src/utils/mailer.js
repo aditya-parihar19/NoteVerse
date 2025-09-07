@@ -26,6 +26,11 @@ const templates = {
     subject: "Welcome to NoteVerse",
     html: loadTemplate("welcome/welcome.html.ejs"),
     text: loadTemplate("welcome/welcome.text.ejs")
+  },
+  resetPassword: {
+    subject: "Password Reset Instructions",
+    html: loadTemplate("resetPassword/resetPassword.html.ejs"),
+    text: loadTemplate("resetPassword/resetPassword.text.ejs")
   }
 }
 
@@ -36,4 +41,11 @@ const sendWelcomeEmail = async (to, name) => {
   await sendEmail(to, subject, text, html)
 }
 
-export {sendWelcomeEmail}
+const SendResetPasswordInstruction = async (to, resetPasswordUrl) => {
+  const html = renderTemplate(templates.resetPassword.html, { email: to, resetPasswordUrl })
+  const text = renderTemplate(templates.resetPassword.text, { email: to, resetPasswordUrl })
+  const subject = templates.welcome.subject
+  await sendEmail(to, subject, text, html)
+}
+
+export { sendWelcomeEmail, SendResetPasswordInstruction }
