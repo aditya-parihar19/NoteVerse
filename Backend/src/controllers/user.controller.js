@@ -187,13 +187,13 @@ const resetPassword = asyncHandler( async (req, res) => {
     throw new ApiError(400, "Reset password token and password are required")
   }
 
-  const hashedToken = crypto.createHash("sha256").update(resetPasswordToken).toString("hex")
+  const hashedToken = crypto.createHash("sha256").update(resetPasswordToken).digest("hex")
 
   if(!hashedToken) {
     throw new ApiError(500, "Failed to generate Reset Password Token, please try again");
   } 
 
-  const  user = await User.findOneAndUpdate({
+  const  user = await User.findOne({
       resetPasswordToken: hashedToken,
       resetPasswordExpires: { $gt: Date.now() }
   })
