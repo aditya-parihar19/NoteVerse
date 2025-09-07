@@ -19,8 +19,12 @@ app.use(express.urlencoded({
 app.use(express.static("public"))
 app.use(cookieParser())
 
-app.use('/', (req, res) => {
-    res.send("App is running now...")
-})
+// Routes import
+import userRoutes from "./routes/user.routes.js"
+import studyMaterialRoutes from "./routes/studyMaterial.routes.js"
+
+// Define routes
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/studyMaterials", studyMaterialRoutes)
 
 export {app}
