@@ -213,6 +213,26 @@ const resetPassword = asyncHandler( async (req, res) => {
   )
 })
 
+const deleteUser = asyncHandler( async (req, res) => {
+  const user = await User.findByIdAndDelete(req.user._id)
+
+  if(!user) {
+    throw new ApiError(404, "User not found")
+  }
+
+  res.status(200).json( 
+    new ApiResponse(200, "Your account has been deleted successfully")
+  )
+})
+
+const getAllUsers = asyncHandler( async (req, res) => {
+  const  users = await User.find().select("_id name email role")
+
+  res.status(200).json(
+    new ApiResponse(200, users, "Users fetched successfully")
+  )
+})
+
 export {
   registerUser,
   loginUser,
@@ -220,5 +240,7 @@ export {
   refreshAccessToken,
   getCurrentUser,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  deleteUser,
+  getAllUsers
 }
