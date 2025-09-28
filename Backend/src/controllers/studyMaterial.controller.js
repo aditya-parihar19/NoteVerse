@@ -12,7 +12,7 @@ const getAllMaterial = asyncHandler( async(req, res) => {
 
   if(title) match.title = { $regex: title, $options: "i" };
   if(type) match.type = type 
-  if(semester) match.type = type
+  if(semester) match.semester = semester
   if(course) match.course = course
   if(branch) match.branch = branch
   if(subject) match.subject = subject
@@ -85,7 +85,7 @@ if(!file) {
 const updateMaterial = asyncHandler( async(req, res) => {
 
   const { materialID } = req.params
-  const { title, type, subject, course, branch, semester} = req.body
+  const { title, type, subject, course, branch, semester } = req.body
   const newFilePath = req?.file?.path
 
   if(!materialID || !isValidObjectId(materialID)){
@@ -110,7 +110,11 @@ const updateMaterial = asyncHandler( async(req, res) => {
     throw new ApiError(403, "You are not authorized to update material")
   }
 
-  await deleteFromCloudinary(study_material?.file)
+  const cloudinary_result = await deleteFromCloudinary(study_material?.file)
+
+  if(cloudinary_result !== "ok"){
+    throw new ApiError(500, "Failed to delete old file from Cloudinary")
+  }
 
   const new_file = await uploadOnCloudinary(newFilePath)
 
@@ -175,8 +179,12 @@ const deleteMaterial = asyncHandler( async(req, res) => {
     throw new  ApiError(403, "You are not authorized to delete this file")
   }
 
+  const cloudinary_result = await deleteFromCloudinary(study_material.file)
+
+  if(cloudinary_result !== "ok"){
+    throw new ApiError(500, "Failed to delete file from Cloudinary")
+  }
   await StudyMaterial.deleteOne({ _id: materialID })
-  await deleteFromCloudinary(study_material.file)
 
   res.json(
     new ApiResponse(200, "Study material deleted successfully")

@@ -13,8 +13,8 @@ const router = Router()
 
 router.route("").get(getAllMaterial)
 router.route("/upload").post(verifyJWT, upload.fields([{ name: "file", maxCount: 1 }]) ,uploadMaterial)
-router.route("/update/:materialId").patch(verifyJWT, updateMaterial)
-router.route("getMaterial/:materialId").get(getMaterial)
-router.route("delete/:materialId").delete(verifyJWT, deleteMaterial)
+router.route("/update/:materialID").patch(verifyJWT, upload.single("file"), updateMaterial)
+router.route("/getMaterial/:materialID").get(getMaterial)
+router.route("/delete/:materialID").delete(verifyJWT, deleteMaterial)
 
 export default router

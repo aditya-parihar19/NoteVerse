@@ -26,9 +26,10 @@ const uploadOnCloudinary = async function(localFilePath) {
 
 const deleteFromCloudinary = async function(cloudinaryUrl){
   try {
-    const publicId = cloudinaryUrl.spilt("/").pop().spilt(".")[0];
+    const publicId = cloudinaryUrl.split('/upload/')[1].replace(/^v\d+\//, '')
 
-    const result = await cloudinary.uploader.destroy(publicId)
+    const result = await cloudinary.uploader.destroy(publicId, { resource_type: "raw"})
+    
     console.log("File deleted from cloudinary", result)
     return result
   } catch (error) {
