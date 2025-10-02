@@ -1,6 +1,7 @@
 import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
+import { errorHandler } from "./middlewares/errorHandler.middleware.js"
 
 const app = express()
 
@@ -21,5 +22,7 @@ import studyMaterialRoutes from "./routes/studyMaterial.routes.js"
 // Define routes
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/studyMaterials", studyMaterialRoutes)
+
+app.use(errorHandler)
 
 export {app}
