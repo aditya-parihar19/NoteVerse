@@ -1,14 +1,12 @@
-import { useState } from 'react'
 import './App.css'
+import { Route, Routes } from 'react-router-dom'
+import HomePage from './pages/homepage'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <h1 className='text-3xl text-amber-500'>CAMPUS-CONNECT</h1>
-      <h5>An application which connects Student and faculties</h5>
-    </>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+    </Routes>
   )
 }
 
