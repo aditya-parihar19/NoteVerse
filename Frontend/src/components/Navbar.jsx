@@ -1,29 +1,37 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-[orange] text-white shadow-md">
+    <nav className="bg-gradient-to-r from-[#F8F9FA] to-[#8ECAE6] text-white shadow-md border-b-2 border-b-indigo-200">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
+          
           {/* Logo */}
-          <div className="text-2xl font-bold">
-            <Link to="/">NoteVerse</Link>
+          <div className="text-3xl font-bold text-[#023047]">
+            <Link to="/">
+              {/* <img className="h-8 w-8" src="/other_logo.png" alt="NoteVerse" /> */}
+              <p className="text-3xl font-bold text-[#023047]">NoteVerse</p>
+            </Link>
           </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-6">
-            <Link to="/" className="hover:text-yellow-200">
-              Home
-            </Link>
-            <Link to="/notes" className="hover:text-yellow-200">
+
+            <Link to="/notes" className="hover:text-[#B1A7F3] transition-colors my-auto">
               Notes
             </Link>
-            <Link to="/papers" className="hover:text-yellow-200">
-              Papers
+
+            <Link to="/papers" className="hover:text-[#F8F9FA] transition-colors my-auto">
+              Question Papers
             </Link>
+
+            <button className="bg-blue-800 text-white font-bold text-center mx-auto my-auto">
+              <Link to="/signup">Sign In</Link>
+            </button>
+
           </div>
 
           {/* Mobile Menu Button */}
@@ -61,14 +69,14 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-orange-500 px-4 pt-2 pb-4 space-y-2">
-          <Link to="/" className="block hover:text-yellow-200">
+        <div className="md:hidden bg-gradient-to-r from-[#219EBC] via-[#8ECAE6] to-[#023047] px-4 pt-2 pb-4 space-y-2">
+          <Link to="/" className="block hover:text-[#80ED99] transition-colors">
             Home
           </Link>
-          <Link to="/notes" className="block hover:text-yellow-200">
+          <Link to="/notes" className="block hover:text-[#B1A7F3] transition-colors">
             Notes
           </Link>
-          <Link to="/papers" className="block hover:text-yellow-200">
+          <Link to="/papers" className="block hover:text-[#F8F9FA] transition-colors">
             Papers
           </Link>
         </div>
