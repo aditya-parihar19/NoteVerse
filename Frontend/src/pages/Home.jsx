@@ -3,7 +3,7 @@ import Footer from "../components/Footer";
 
 export default function HomePage() {
   return (
-    <div className="bg-[#F8F9FA] text-gray-900 font-sans w-full mx-auto">
+    <div className="bg-[#F8F9FA] text-gray-900 font-sans w-full mx-auto my-auto">
 
       {/* Navbar */}
       <Navbar />

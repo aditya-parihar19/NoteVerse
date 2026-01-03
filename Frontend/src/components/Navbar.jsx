@@ -29,7 +29,7 @@ export default function Navbar() {
             </Link>
 
             <button className="bg-blue-800 text-white font-bold text-center mx-auto my-auto">
-              <Link to="/signup">Sign In</Link>
+              <Link to="/signin">Sign In</Link>
             </button>
 
           </div>
