@@ -5,4 +5,9 @@ const login = async ({email, password}) => {
   return res.data;
 }
 
-export  { login }
+const signup = async (data) => {
+  const res = await api.post("users/register", data);
+  return res.data
+}
+
+export  { login,  signup }
