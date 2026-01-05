@@ -10,4 +10,9 @@ const signupApi = async (data) => {
   return res.data
 }
 
-export  { loginApi,  signupApi }
+const logoutApi = async (data) => {
+  const res = await api.post("users/logout", data);
+  return res.data
+}
+
+export  { loginApi,  signupApi, logoutApi }

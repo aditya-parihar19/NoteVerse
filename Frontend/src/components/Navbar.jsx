@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Logo from "./Logo";
+import {useSelector} from "react-redux"
+import LogoutBtn from "./logoutBtn";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const  isAuthenticated = useSelector((state) => state.auth.status);
 
   return (
     <nav className="bg-gradient-to-r from-[#F8F9FA] to-[#8ECAE6] text-white shadow-md border-b-2 border-b-indigo-200">
@@ -10,12 +14,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           
           {/* Logo */}
-          <div className="text-3xl font-bold text-[#023047]">
-            <Link to="/">
-              {/* <img className="h-8 w-8" src="/other_logo.png" alt="NoteVerse" /> */}
-              <p className="text-3xl font-bold text-[#023047]">NoteVerse</p>
-            </Link>
-          </div>
+          <Logo/>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-6">
@@ -28,9 +27,11 @@ export default function Navbar() {
               Question Papers
             </Link>
 
-            <button className="bg-blue-800 text-white font-bold text-center mx-auto my-auto">
+            {!isAuthenticated && <button className="bg-blue-800 text-white font-bold text-center mx-auto my-auto">
               <Link to="/signin">Sign In</Link>
-            </button>
+            </button>}
+
+            { isAuthenticated && <LogoutBtn/>}
 
           </div>
 
