@@ -45,7 +45,8 @@ const registerUser = asyncHandler( async (req, res) => {
     name, email, password, role
   })
 
-  const createdUser = await User.findById(user._id).select("-refresh_token")
+  const createdUser = await User.findById(user._id).select("-password -refreshToken")
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(createdUser._id)
 
   if(!createdUser){
     throw new ApiError(500, "something went wrong while registering user");
@@ -54,7 +55,7 @@ const registerUser = asyncHandler( async (req, res) => {
   sendWelcomeEmail(createdUser.email, createdUser.name)
 
   res.status(201).json(
-    new ApiResponse(201, createdUser, "User registered successfully")
+    new ApiResponse(201, {createdUser, accessToken,  refreshToken}, "User registered successfully")
   )
 
 })
