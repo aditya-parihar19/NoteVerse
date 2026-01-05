@@ -1,18 +1,28 @@
 import Input from "../components/Input";
 import Button from "../components/Button";
 import {useForm} from "react-hook-form";
-import  {login} from "../api/auth.js";
+import  {loginApi} from "../api/auth.js";
 import { useNavigate } from "react-router-dom"
+import {useDispatch} from "react-redux"
+import { login } from "../store/authSlice.js";
 
 export default function Login() {
 
   const { register, handleSubmit, formState: {errors, isSubmitting}, reset} = useForm();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogin = async(data) => {
-    const userData = await login(data);
-    console.log("data: ", userData);
-    reset();
+    try {
+      const response = await loginApi(data);
+      localStorage.setItem("token", response.data?.accessToken);
+      dispatch(login({user: response?.data?.loggedinUser}));
+      reset();
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.message || "Login Failed");
+    }
   };
 
   return (

@@ -1,13 +1,13 @@
 import { api } from  "./client.js"
 
-const login = async ({email, password}) => {
+const loginApi = async ({email, password}) => {
   const res = await api.post("users/login", {email, password});
   return res.data;
 }
 
-const signup = async (data) => {
+const signupApi = async (data) => {
   const res = await api.post("users/register", data);
   return res.data
 }
 
-export  { login,  signup }
+export  { loginApi,  signupApi }
