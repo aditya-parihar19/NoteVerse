@@ -14,5 +14,9 @@ const logoutApi = async (data) => {
   const res = await api.post("users/logout", data);
   return res.data
 }
+const currentUserApi = async (data) => {
+  const res = await api.get("users/current-user");
+  return res.data
+}
 
-export  { loginApi,  signupApi, logoutApi }
+export  { loginApi,  signupApi, logoutApi, currentUserApi }

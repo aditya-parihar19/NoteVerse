@@ -1,26 +1,32 @@
 import Input from "../components/Input";
 import Button from "../components/Button";
-import {useForm} from "react-hook-form";
-import {useNavigate} from "react-router-dom";
-import { signupApi } from "../api/auth";
-import { useDispatch } from "react-redux";
-import { login } from "../store/authSlice";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { signupUser } from "../store/authSlice";
+import { signUpSchema } from "../schema/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function Signup() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm({
+    resolver: zodResolver(signUpSchema),
+  });
 
-  const { register, handleSubmit, formState: {errors,  isSubmitting}, reset} = useForm();
-  const  navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error } = useSelector((state) => state.auth);
+
   const handleSignup = async (data) => {
-    try{
-      const response = await signupApi(data);
-      localStorage.setItem("token", response.data?.accessToken);
-      dispatch(login({user: response?.data?.createdUser}));
+    const resultAction = await dispatch(signupUser(data));
+
+    if (signupUser.fulfilled.match(resultAction)) {
       reset();
       navigate("/");
-    } catch (error) {
-      console.error(error)
-      alert(error.response?.data?.message || "Signup Failed")
     }
   };
 
@@ -46,18 +52,21 @@ export default function Signup() {
               label="Full Name"
               type="text"
               placeholder="Enter your full name"
+              error={errors?.name?.message}
               { ...register("name")}
             />
             <Input
               label="Email"
               type="email"
               placeholder="Enter your email"
+              error={errors?.email?.message}
               { ...register("email")}
             />
             <Input
               label="Password"
               type="password"
               placeholder="Enter your password"
+              error={errors?.password?.message}
               { ...register("password")}
             />
             {/* <Input

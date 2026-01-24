@@ -1,29 +1,56 @@
 import Input from "../components/Input";
 import Button from "../components/Button";
-import {useForm} from "react-hook-form";
-import  {loginApi} from "../api/auth.js";
-import { useNavigate } from "react-router-dom"
-import {useDispatch} from "react-redux"
-import { login } from "../store/authSlice.js";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../store/authSlice.js";
+import { loginSchema } from "../schema/schema.js";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
+import Loader from "../components/Loader.jsx";
+import { useEffect } from "react";
 
 export default function Login() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+  });
 
-  const { register, handleSubmit, formState: {errors, isSubmitting}, reset} = useForm();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error } = useSelector((state) => state.auth);
 
-  const handleLogin = async(data) => {
+  // Show toast on error changes
+  // useEffect(() => {
+  //   if (error) {
+  //     toast.error(error);
+  //   }
+  // }, [error]);
+
+  const handleLogin = async (data) => {
     try {
-      const response = await loginApi(data);
-      localStorage.setItem("token", response.data?.accessToken);
-      dispatch(login({user: response?.data?.loggedinUser}));
-      reset();
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-      alert(error.response?.data?.message || "Login Failed");
+      const resultAction = await dispatch(loginUser(data));
+
+      if (loginUser.fulfilled.match(resultAction)) {
+        reset();
+        navigate("/");
+        toast.success("Logged in successfully!");
+      } else if (loginUser.rejected.match(resultAction)) {
+        // If thunk rejected with message
+        const message =
+          resultAction.payload || "Login failed. Please try again!";
+        toast.error(message);
+      }
+    } catch (err) {
+      toast.error("Something went wrong. Try again!");
     }
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div className="min-h-screen flex">
@@ -47,12 +74,14 @@ export default function Login() {
               label="Email"
               type="email"
               placeholder="Enter your email"
+              error={errors?.email?.message}
               {...register("email")}
             />
             <Input
               label="Password"
               type="password"
               placeholder="Enter your password"
+              error={errors?.password?.message}
               {...register("password")}
             />
 

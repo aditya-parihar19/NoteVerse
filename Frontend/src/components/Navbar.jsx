@@ -1,24 +1,22 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "./Logo";
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux";
 import LogoutBtn from "./logoutBtn";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const  isAuthenticated = useSelector((state) => state.auth.status);
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   return (
-    <nav className="bg-gradient-to-r from-[#F8F9FA] to-[#8ECAE6] text-white shadow-md border-b-2 border-b-indigo-200">
+    <nav className="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-[#F8F9FA] to-[#8ECAE6] text-white shadow-md border-b-2 border-b-indigo-200">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          
           {/* Logo */}
-          <Logo/>
+          <Logo />
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-6">
-
             <Link to="/notes" className="hover:text-[#B1A7F3] transition-colors my-auto">
               Notes
             </Link>
@@ -27,40 +25,23 @@ export default function Navbar() {
               Question Papers
             </Link>
 
-            {!isAuthenticated && <button className="bg-blue-800 text-white font-bold text-center mx-auto my-auto">
-              <Link to="/signin">Sign In</Link>
-            </button>}
+            {!isAuthenticated && (
+              <button className="bg-blue-800 text-white font-bold text-center mx-auto my-auto px-4 py-2 rounded">
+                <Link to="/signin">Sign In</Link>
+              </button>
+            )}
 
-            { isAuthenticated && <LogoutBtn/>}
-
+            {isAuthenticated && <LogoutBtn />}
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="focus:outline-none"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+            <button onClick={() => setIsOpen(!isOpen)} className="focus:outline-none">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {isOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                 ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                 )}
               </svg>
             </button>

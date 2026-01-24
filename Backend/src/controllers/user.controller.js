@@ -54,7 +54,9 @@ const registerUser = asyncHandler( async (req, res) => {
 
   sendWelcomeEmail(createdUser.email, createdUser.name)
 
-  res.status(201).json(
+  res.status(201)
+  .cookie("accessToken", accessToken, options)
+  .json(
     new ApiResponse(201, {createdUser, accessToken,  refreshToken}, "User registered successfully")
   )
 
