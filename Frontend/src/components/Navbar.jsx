@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Logo from "./Logo";
 import { useSelector } from "react-redux";
 import LogoutBtn from "./logoutBtn";
+import Button from "./Button";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,9 +27,9 @@ export default function Navbar() {
             </Link>
 
             {!isAuthenticated && (
-              <button className="bg-blue-800 text-white font-bold text-center mx-auto my-auto px-4 py-2 rounded">
+              <Button>
                 <Link to="/signin">Sign In</Link>
-              </button>
+              </Button>
             )}
 
             {isAuthenticated && <LogoutBtn />}

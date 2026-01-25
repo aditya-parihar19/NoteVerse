@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { loginApi, signupApi, currentUserApi } from "../api/auth";
+import { loginApi, signupApi, currentUserApi, logoutApi } from "../api/auth";
 
 export const loginUser = createAsyncThunk(
   "auth/login",
@@ -24,6 +24,21 @@ export const signupUser = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Signup failed"
+      );
+    }
+  }
+);
+
+
+export const logoutUser = createAsyncThunk(
+  "auth/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      await logoutApi();
+      return true;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Logout failed"
       );
     }
   }
@@ -76,6 +91,20 @@ const authSlice = createSlice({
       state.user = action.payload;
     })
     .addCase(loginUser.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+
+    .addCase(logoutUser.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(logoutUser.fulfilled, (state) => {
+      state.loading = false;
+      state.isAuthenticated = false;
+      state.user = null;
+      state.error = null;
+    })
+    .addCase(logoutUser.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     })

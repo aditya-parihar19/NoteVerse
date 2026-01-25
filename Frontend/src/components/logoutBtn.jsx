@@ -1,29 +1,23 @@
-import Button from  "./Button"
-import { logoutApi } from "../api/auth"
-import { logout } from "../store/authSlice"
-import { useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import Button from "./Button";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logoutUser } from "../store/authSlice";
+import toast from "react-hot-toast";
 
 export default function LogoutBtn() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleLogout = async() => {
-    try {
-      await logoutApi();
-      localStorage.removeItem("token");
-      dispatch(logout());
+  const handleLogout = async () => {
+    const result = await dispatch(logoutUser());
+
+    if (logoutUser.fulfilled.match(result)) {
+      toast.success("Logged out successfully");
       navigate("/");
-    } catch (error) {
-      console.error(error);
-      alert("Logout failed. Please try again.");
+    } else {
+      toast.error(result.payload || "Logout failed");
     }
-  }
-  return (
-    <>
-      <Button onClick={handleLogout}>
-        Logout
-      </Button>
-    </>
-  );
+  };
+
+  return <Button onClick={handleLogout}>Logout</Button>;
 }
