@@ -4,6 +4,7 @@ import Logo from "./Logo";
 import { useSelector } from "react-redux";
 import LogoutBtn from "./logoutBtn";
 import Button from "./Button";
+import ProfileMenu from "./ProfileMenu";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,7 +33,7 @@ export default function Navbar() {
               </Button>
             )}
 
-            {isAuthenticated && <LogoutBtn />}
+            {isAuthenticated && <ProfileMenu />}
           </div>
 
           {/* Mobile Menu Button */}

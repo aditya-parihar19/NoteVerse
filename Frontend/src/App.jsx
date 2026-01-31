@@ -7,9 +7,13 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Loader from "./components/Loader";
 import StudyMaterial from "./components/StudyMaterial";
+import Profile from "./pages/Profile";
+import NoteView from "./components/NoteView";
 
 import { getCurrentUser } from "./store/authSlice";
-import { Toaster } from "react-hot-toast"
+import { Toaster } from "react-hot-toast";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const dispatch = useDispatch();
@@ -53,6 +57,10 @@ function App() {
       <Route path="/signin" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/notes" element={<StudyMaterial />} />
+      <Route path="/notes/:id" element={<NoteView />} />
+      <Route path="/my-profile" element={<Profile />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
     </Routes>
     </>
   );

@@ -1,14 +1,13 @@
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../store/authSlice.js";
+import { getCurrentUser, loginUser } from "../store/authSlice.js";
 import { loginSchema } from "../schema/schema.js";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import Loader from "../components/Loader.jsx";
-import { useEffect } from "react";
 
 export default function Login() {
   const {
@@ -24,19 +23,13 @@ export default function Login() {
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
 
-  // Show toast on error changes
-  // useEffect(() => {
-  //   if (error) {
-  //     toast.error(error);
-  //   }
-  // }, [error]);
-
   const handleLogin = async (data) => {
     try {
       const resultAction = await dispatch(loginUser(data));
 
       if (loginUser.fulfilled.match(resultAction)) {
         reset();
+        await dispatch(getCurrentUser());
         navigate("/");
         toast.success("Logged in successfully!");
       } else if (loginUser.rejected.match(resultAction)) {
@@ -84,6 +77,12 @@ export default function Login() {
               error={errors?.password?.message}
               {...register("password")}
             />
+            <Link
+              to="/forgot-password"
+              className="text-right text-sm text-[#219EBC] hover:text-[#023047] mt-1 pb-6"
+            >
+              Forgot Password?
+            </Link>
 
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               { isSubmitting ? "Logging  in..." : "Login"}

@@ -19,4 +19,19 @@ const currentUserApi = async (data) => {
   return res.data
 }
 
-export  { loginApi,  signupApi, logoutApi, currentUserApi }
+const deleteUserApi = async (data) => {
+  const res = await api.delete("users/delete");
+  return res.data
+}
+
+const forgotPasswordApi = async (email) => {
+  const res = await api.post("users/forgot-password", email);
+  return res.data;
+}
+
+const resetPasswordApi = async (data) => {
+  const res = await api.patch("users/reset-password", data);
+  return res.data;
+}
+
+export  { loginApi,  signupApi, logoutApi, currentUserApi, deleteUserApi, forgotPasswordApi, resetPasswordApi}

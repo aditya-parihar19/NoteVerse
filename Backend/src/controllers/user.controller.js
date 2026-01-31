@@ -184,13 +184,13 @@ const forgotPassword = asyncHandler( async  (req, res) => {
 })
 
 const resetPassword = asyncHandler( async (req, res) => {
-  const { resetPasswordToken, password } = req.body
+  const { token, password } = req.body
 
-  if(!resetPasswordToken || !password){
+  if(!token || !password){
     throw new ApiError(400, "Reset password token and password are required")
   }
 
-  const hashedToken = crypto.createHash("sha256").update(resetPasswordToken).digest("hex")
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex")
 
   if(!hashedToken) {
     throw new ApiError(500, "Failed to generate Reset Password Token, please try again");
@@ -224,7 +224,7 @@ const deleteUser = asyncHandler( async (req, res) => {
   }
 
   res.status(200).json( 
-    new ApiResponse(200, "Your account has been deleted successfully")
+    new ApiResponse(200, null, "Your account has been deleted successfully")
   )
 })
 

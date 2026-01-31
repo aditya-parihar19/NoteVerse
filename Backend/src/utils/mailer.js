@@ -44,7 +44,7 @@ const sendWelcomeEmail = async (to, name) => {
 const SendResetPasswordInstruction = async (to, resetPasswordUrl) => {
   const html = renderTemplate(templates.resetPassword.html, { email: to, resetPasswordUrl })
   const text = renderTemplate(templates.resetPassword.text, { email: to, resetPasswordUrl })
-  const subject = templates.welcome.subject
+  const subject = templates.resetPassword.subject
   await sendEmail(to, subject, text, html)
 }
 
