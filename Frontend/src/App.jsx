@@ -14,6 +14,7 @@ import { getCurrentUser } from "./store/authSlice";
 import { Toaster } from "react-hot-toast";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import UploadMaterial from "./components/UploadMaterial";
 
 function App() {
   const dispatch = useDispatch();
@@ -61,6 +62,7 @@ function App() {
       <Route path="/my-profile" element={<Profile />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <Route path="/upload" element={<UploadMaterial />} />
     </Routes>
     </>
   );
