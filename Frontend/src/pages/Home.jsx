@@ -63,7 +63,7 @@ export default function HomePage() {
               Your one-stop platform for accessing high-quality{" "}
               <strong>study notes</strong> and <strong>previous year question papers</strong>.
             </p>
-            <button className="bg-[#219EBC] hover:bg-[#023047] text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all duration-300"
+            <button className="bg-[#219EBC] hover:bg-[#023047] hover:cursor-pointer text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all duration-300"
             
             onClick={() => navigate("/notes")}
 
@@ -113,7 +113,9 @@ export default function HomePage() {
     <p className="mb-8 text-lg md:text-xl max-w-xl mx-auto leading-relaxed text-white">
       Revise smarter, practice better, and achieve your goals with a single platform.
     </p>
-    <button className="bg-white hover:bg-gray-100 text-[#219EBC] px-8 py-3 rounded-lg font-semibold shadow-lg transition-all duration-300">
+    <button
+    onClick={() => navigate("/signin")}
+    className="bg-white hover:bg-gray-100 text-[#219EBC] px-8 py-3 rounded-lg font-semibold shadow-lg transition-all duration-300 hover: cursor-pointer">
       Get Started
     </button>
   </div>

@@ -19,11 +19,15 @@ export default function Navbar() {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-6">
+            <Link to="/upload" className="hover:text-[#B1A7F3] transition-colors my-auto">
+              Upload yours
+            </Link>
+
             <Link to="/notes" className="hover:text-[#B1A7F3] transition-colors my-auto">
               Notes
             </Link>
 
-            <Link to="/papers" className="hover:text-[#F8F9FA] transition-colors my-auto">
+            <Link to="/notes" className="hover:text-[#F8F9FA] transition-colors my-auto">
               Question Papers
             </Link>
 

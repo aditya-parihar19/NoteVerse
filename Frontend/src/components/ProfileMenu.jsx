@@ -39,14 +39,14 @@ export default function ProfileMenu() {
       {/* Profile Button */}
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#023047] hover:bg-white/10 transition"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#023047] hover:bg-white/10 transition hover:cursor-pointer"
       >
         <span className="w-8 h-8 flex items-center justify-center bg-white text-[#023047] font-bold rounded-full">
           {user?.name?.[0]?.toUpperCase() || "U"}
         </span>
 
         <span className="hidden md:block font-medium text-white">
-          {user?.name || "Profile"}
+          {user?.name?.split(" ")[0] || "Profile"}
         </span>
 
         {open ? (
@@ -58,7 +58,7 @@ export default function ProfileMenu() {
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border z-50 overflow-hidden">
+        <div className="absolute right-0 mt-3 w-48 bg-white rounded-md shadow-lg border z-50 overflow-hidden">
           <button
             onClick={() => {
               navigate("/my-profile");
